@@ -25,5 +25,9 @@ namespace Consultation.Domain
         public int FacultyScheduleID { get; set; }
         public virtual FacultySchedule FacultySchedule { get; set; }
         public List<ConsultationRequest> ConsultationRequests { get; set; }
+
+
+        [ForeignKey(nameof(UserID))]
+        public int UserID { get; set; }
     }
 }
