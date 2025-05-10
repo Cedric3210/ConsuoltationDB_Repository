@@ -16,18 +16,25 @@ namespace Consultation.Domain
         public string FacultyUMID { get; set; }
   
         public string FacultyName { get; set; }
-
+        
+        //not needed
         [ForeignKey(nameof(EnrolledCourseID))]
         public int EnrolledCourseID { get; set; }
         public virtual EnrolledCourse EnrolledCourse { get; set; }
 
-        [ForeignKey(nameof(FacultyScheduleID))]
-        public int FacultyScheduleID { get; set; }
-        public virtual FacultySchedule FacultySchedule { get; set; }
-        public List<ConsultationRequest> ConsultationRequests { get; set; }
-
-
         [ForeignKey(nameof(UserID))]
         public int UserID { get; set; }
+        public virtual Users Users { get; set; }
+
+        //di nsd ni need na FK
+        [ForeignKey(nameof(FacultyScheduleID))]
+        public int FacultyScheduleID { get; set; }
+        //kani pabilin
+        public virtual FacultySchedule FacultySchedule { get; set; }
+        
+        //change to ICollection<>
+        public List<ConsultationRequest> ConsultationRequests { get; set; }
+        //add sad
+        public ICollection<SchoolYear> SchoolYears { get; set; }
     }
 }

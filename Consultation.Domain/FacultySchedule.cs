@@ -13,9 +13,16 @@ namespace Consultation.Domain
     {
         [Key]
         public int FacultyScheduleID { get; set; }
+        
         public DateTime TimeStart { get; set; }
+        
         public DateTime TimeEnd { get; set; }
 
         public DaysOfWeek Day { get; set; }
+
+        //add
+        [ForeignKey(nameof(Faculty))]
+        public int FacultyID { get; set; }
+        public virtual Faculty Faculty { get; set; }
     }
 }

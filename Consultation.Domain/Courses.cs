@@ -21,7 +21,8 @@ namespace Consultation.Domain
 
         [ForeignKey(nameof(ProgramID))]
         public int? ProgramID { get; set; }
-
         public virtual Program Program { get; set; }
+
+        //public ICollection<EnrolledCourse> EnrolledCourses { get; set; }
     }
 }

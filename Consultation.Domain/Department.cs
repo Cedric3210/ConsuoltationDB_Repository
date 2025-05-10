@@ -15,5 +15,8 @@ namespace Consultation.Domain
         public string DepartmentName { get; set; }
 
         public string Description { get; set; }
+
+        //many programs to one department
+        //public ICollection<Program> Programs { get; set; }
     }
 }

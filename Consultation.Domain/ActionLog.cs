@@ -22,5 +22,6 @@ namespace Consultation.Domain
 
         [ForeignKey(nameof(UserID))]
         public int UserID { get; set; }
+        public virtual Users Users { get; set; }
     }
 }

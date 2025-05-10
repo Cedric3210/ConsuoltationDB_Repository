@@ -14,21 +14,21 @@ namespace Consultation.Domain
         [Key]
         public int ConsultationID { get; set; }
 
-        public DateTime DateSchedule { get; set; }
-
-        public string Concern { get; set; }
-
         public DateTime DateRequested { get; set; }
-
-        public Status Status { get; set; }
+        
+        public DateTime DateSchedule { get; set; }
 
         public TimeOnly StartedTime { get; set; }
 
         public TimeOnly EndedTime { get; set; }
 
+        public string Concern { get; set; }
+
         public string? DisapprovedReason { get; set; }
 
         public string SubjectCode { get; set; }
+
+        public Status Status { get; set; }
 
         public Notification Notification { get; set; }
 

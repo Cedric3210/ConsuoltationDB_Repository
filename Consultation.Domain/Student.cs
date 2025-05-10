@@ -12,22 +12,26 @@ namespace Consultation.Domain
     {
         [Key]
         public int StudentID { get; set; }
+        
         public string StudentUMID { get; set; }
+        
         public string StudentName { get; set; }
+        
         public string Email { get; set; }
-
-        public List<SchoolYear> SchoolYears { get; set; }
-
+        
         [ForeignKey(nameof(ProgramID))]
         public int ProgramID { get; set; }
         public virtual Program Program { get; set; }
 
-        public List<ConsultationRequest> ConsultationRequests { get; set; }
-        public List<EnrolledCourse> EnrolledCourses { get; set; }
-
-
         [ForeignKey(nameof(UserID))]
         public int UserID { get; set; }
+        public virtual Users Users { get; set; }
 
+        //preferable ang ICollection<> kaysa sa List<>
+        public List<ConsultationRequest> ConsultationRequests { get; set; }
+        public List<SchoolYear> SchoolYears { get; set; }
+
+        //d nmn ata ni needed
+        public List<EnrolledCourse> EnrolledCourses { get; set; }
     }
 }
