@@ -16,5 +16,9 @@ namespace Consultation.Domain
         public string AdminUsername { get; set; }
 
         public string AdminPassword { get; set; }
+
+
+        [ForeignKey(nameof(UserID))]
+        public int UserID { get; set; }
     }
 }
