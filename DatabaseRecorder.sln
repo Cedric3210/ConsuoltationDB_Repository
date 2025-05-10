@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Consultation.Infrastructure", "Consultation.Infrastructure\Consultation.Infrastructure.csproj", "{50C401EF-17EB-4473-B90F-BACD08306ED8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Consultation.Domain", "Consultation.Domain\Consultation.Domain.csproj", "{84C2E55A-F807-4434-B3CA-4948797905F2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlutterAPI", "FlutterAPI\FlutterAPI.csproj", "{AF30C7F0-1BA8-4BD0-9CDD-64132AE84263}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Enum", "Enum", "{B714E679-DA0A-41C4-8587-FF0093F0329C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enum", "Enum\Enum.csproj", "{6C99B23B-8BCF-4F4F-97D0-DD147F959DD9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{50C401EF-17EB-4473-B90F-BACD08306ED8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50C401EF-17EB-4473-B90F-BACD08306ED8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50C401EF-17EB-4473-B90F-BACD08306ED8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50C401EF-17EB-4473-B90F-BACD08306ED8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84C2E55A-F807-4434-B3CA-4948797905F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84C2E55A-F807-4434-B3CA-4948797905F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84C2E55A-F807-4434-B3CA-4948797905F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84C2E55A-F807-4434-B3CA-4948797905F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF30C7F0-1BA8-4BD0-9CDD-64132AE84263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF30C7F0-1BA8-4BD0-9CDD-64132AE84263}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF30C7F0-1BA8-4BD0-9CDD-64132AE84263}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF30C7F0-1BA8-4BD0-9CDD-64132AE84263}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C99B23B-8BCF-4F4F-97D0-DD147F959DD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C99B23B-8BCF-4F4F-97D0-DD147F959DD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C99B23B-8BCF-4F4F-97D0-DD147F959DD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C99B23B-8BCF-4F4F-97D0-DD147F959DD9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6C99B23B-8BCF-4F4F-97D0-DD147F959DD9} = {B714E679-DA0A-41C4-8587-FF0093F0329C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1D43CDB5-0861-4E5D-AB8D-59DCA4B29FFA}
+	EndGlobalSection
+EndGlobal
