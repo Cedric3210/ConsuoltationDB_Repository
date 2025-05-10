@@ -25,6 +25,7 @@ namespace Consultation.Domain
         [ForeignKey(nameof(FacultyID))]
         public int  FacultyID { get; set; }
 
+        public virtual Faculty Faculty { get; set; }
         public virtual EnrolledCourse EnrolledCourse { get; set; }
 
     }
