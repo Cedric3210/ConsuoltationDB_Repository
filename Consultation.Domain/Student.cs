@@ -23,6 +23,7 @@ namespace Consultation.Domain
         public virtual Program Program { get; set; }
 
         public List<ConsultationRequest> ConsultationRequests { get; set; }
+        public List<EnrolledCourse> EnrolledCourses { get; set; }
 
     }
 }
