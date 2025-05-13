@@ -1,4 +1,5 @@
-﻿using Consultation.Domain.Enum;
+﻿using Consultation.Domain;
+using Consultation.Domain.Enum;
 using System.ComponentModel.DataAnnotations;
 
 namespace FlutterAPI.ViewModel
@@ -13,5 +14,13 @@ namespace FlutterAPI.ViewModel
 
         public string UserPassword { get; set; }
         public UserType UserType { get; set; }
+
+        public Admin Admin { get; set; }
+
+        public Faculty Faculty { get; set; }
+
+        public Student Student { get; set; }
+
+
     }
 }

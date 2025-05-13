@@ -8,10 +8,10 @@ namespace FlutterAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class ConsultationtController: ControllerBase
+    public class ConsultationController: ControllerBase
     {
         private readonly AppDbContext _context;
-        public ConsultationtController(AppDbContext context)
+        public ConsultationController(AppDbContext context)
         {
             _context = context;
         }

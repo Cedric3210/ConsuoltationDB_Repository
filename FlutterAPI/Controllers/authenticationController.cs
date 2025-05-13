@@ -39,15 +39,16 @@ namespace FlutterAPI.Controllers
                 UserPassword = Users.UserPassword,
                 UserEmail = Users.UserEmail,
                 UMID = Users.UMID,
+               
             };
 
-            _context.ActionLog.Add(new ActionLog
-            {
-                ActionLogID = 0,
-                Description = "Account has been Added",
-                Date = DateTime.Now,
-                Time = TimeOnly.FromDateTime(DateTime.Now)
-            });
+            //_context.ActionLog.Add(new ActionLog
+            //{
+            //    ActionLogID = 0,
+            //    Description = "Account has been Added",
+            //    Date = DateTime.Now,
+            //    Time = TimeOnly.FromDateTime(DateTime.Now)
+            //});
 
             _context.Users.Add(student);
             await _context.SaveChangesAsync();
@@ -68,13 +69,9 @@ namespace FlutterAPI.Controllers
             if (!IsValidUser(Users.UserEmail, Users.UserPassword))
                 return Unauthorized("Wrong Email and Password.");
 
-            _context.ActionLog.Add(new ActionLog
-            {
-                ActionLogID = 0,
-                Description = "Login",
-                Date = DateTime.Now,
-                Time = TimeOnly.FromDateTime(DateTime.Now)
-            });
+            string message = $"{Users.UserEmail} has logged in";
+            var actionlog = ActionLogController.ActionLogInput(message, Users.UserEmail, Users.UserType, Users.UserID);
+            _context.ActionLog.Add(actionlog);
             _context.SaveChanges();
 
             return Ok(new

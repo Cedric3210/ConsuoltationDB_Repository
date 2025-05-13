@@ -43,7 +43,12 @@ namespace Consultation.Infrastructure.Migrations
                     b.Property<int>("UserID")
                         .HasColumnType("int");
 
+                    b.Property<int>("UsersUserID")
+                        .HasColumnType("int");
+
                     b.HasKey("ActionLogID");
+
+                    b.HasIndex("UsersUserID");
 
                     b.ToTable("ActionLog");
                 });
@@ -232,6 +237,9 @@ namespace Consultation.Infrastructure.Migrations
                     b.Property<int>("FacultyID")
                         .HasColumnType("int");
 
+                    b.Property<int>("SchoolYearID")
+                        .HasColumnType("int");
+
                     b.Property<int>("StudentID")
                         .HasColumnType("int");
 
@@ -240,6 +248,9 @@ namespace Consultation.Infrastructure.Migrations
                     b.HasIndex("CourseID");
 
                     b.HasIndex("FacultyID")
+                        .IsUnique();
+
+                    b.HasIndex("SchoolYearID")
                         .IsUnique();
 
                     b.HasIndex("StudentID");
@@ -271,8 +282,6 @@ namespace Consultation.Infrastructure.Migrations
 
                     b.HasKey("FacultyID");
 
-                    b.HasIndex("FacultyScheduleID");
-
                     b.ToTable("Faculty");
                 });
 
@@ -287,6 +296,9 @@ namespace Consultation.Infrastructure.Migrations
                     b.Property<int>("Day")
                         .HasColumnType("int");
 
+                    b.Property<int>("FacultyID")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("TimeEnd")
                         .HasColumnType("datetime2");
 
@@ -294,6 +306,9 @@ namespace Consultation.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("FacultyScheduleID");
+
+                    b.HasIndex("FacultyID")
+                        .IsUnique();
 
                     b.ToTable("FacultySchedule");
                 });
@@ -349,10 +364,6 @@ namespace Consultation.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SchoolYearID"));
 
-                    b.Property<string>("EnrolledCourseID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("FacultyID")
                         .HasColumnType("int");
 
@@ -362,7 +373,7 @@ namespace Consultation.Infrastructure.Migrations
                     b.Property<int>("Semester")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StudentID")
+                    b.Property<int>("StudentID")
                         .HasColumnType("int");
 
                     b.Property<string>("Year1")
@@ -375,7 +386,7 @@ namespace Consultation.Infrastructure.Migrations
 
                     b.HasKey("SchoolYearID");
 
-                    b.HasIndex("EnrolledCourseID");
+                    b.HasIndex("FacultyID");
 
                     b.HasIndex("StudentID");
 
@@ -420,6 +431,15 @@ namespace Consultation.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserID"));
 
+                    b.Property<int?>("AdminID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FacultyID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StudentID")
+                        .HasColumnType("int");
+
                     b.Property<string>("UMID")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -437,7 +457,30 @@ namespace Consultation.Infrastructure.Migrations
 
                     b.HasKey("UserID");
 
+                    b.HasIndex("AdminID")
+                        .IsUnique()
+                        .HasFilter("[AdminID] IS NOT NULL");
+
+                    b.HasIndex("FacultyID")
+                        .IsUnique()
+                        .HasFilter("[FacultyID] IS NOT NULL");
+
+                    b.HasIndex("StudentID")
+                        .IsUnique()
+                        .HasFilter("[StudentID] IS NOT NULL");
+
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Consultation.Domain.ActionLog", b =>
+                {
+                    b.HasOne("Consultation.Domain.Users", "Users")
+                        .WithMany()
+                        .HasForeignKey("UsersUserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Consultation.Domain.ConsultationRequest", b =>
@@ -490,8 +533,14 @@ namespace Consultation.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Consultation.Domain.SchoolYear", "SchoolYear")
+                        .WithOne("EnrolledCourse")
+                        .HasForeignKey("Consultation.Domain.EnrolledCourse", "SchoolYearID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Consultation.Domain.Student", "Student")
-                        .WithMany()
+                        .WithMany("EnrolledCourses")
                         .HasForeignKey("StudentID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -500,18 +549,20 @@ namespace Consultation.Infrastructure.Migrations
 
                     b.Navigation("Faculty");
 
+                    b.Navigation("SchoolYear");
+
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("Consultation.Domain.Faculty", b =>
+            modelBuilder.Entity("Consultation.Domain.FacultySchedule", b =>
                 {
-                    b.HasOne("Consultation.Domain.FacultySchedule", "FacultySchedule")
-                        .WithMany()
-                        .HasForeignKey("FacultyScheduleID")
+                    b.HasOne("Consultation.Domain.Faculty", "Faculty")
+                        .WithOne("FacultySchedule")
+                        .HasForeignKey("Consultation.Domain.FacultySchedule", "FacultyID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("FacultySchedule");
+                    b.Navigation("Faculty");
                 });
 
             modelBuilder.Entity("Consultation.Domain.Program", b =>
@@ -527,17 +578,21 @@ namespace Consultation.Infrastructure.Migrations
 
             modelBuilder.Entity("Consultation.Domain.SchoolYear", b =>
                 {
-                    b.HasOne("Consultation.Domain.EnrolledCourse", "EnrolledCourse")
-                        .WithMany()
-                        .HasForeignKey("EnrolledCourseID")
+                    b.HasOne("Consultation.Domain.Faculty", "Faculty")
+                        .WithMany("SchoolYears")
+                        .HasForeignKey("FacultyID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Consultation.Domain.Student", null)
+                    b.HasOne("Consultation.Domain.Student", "Student")
                         .WithMany("SchoolYears")
-                        .HasForeignKey("StudentID");
+                        .HasForeignKey("StudentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("EnrolledCourse");
+                    b.Navigation("Faculty");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("Consultation.Domain.Student", b =>
@@ -551,10 +606,51 @@ namespace Consultation.Infrastructure.Migrations
                     b.Navigation("Program");
                 });
 
+            modelBuilder.Entity("Consultation.Domain.Users", b =>
+                {
+                    b.HasOne("Consultation.Domain.Admin", "Admin")
+                        .WithOne("Users")
+                        .HasForeignKey("Consultation.Domain.Users", "AdminID");
+
+                    b.HasOne("Consultation.Domain.Faculty", "Faculty")
+                        .WithOne("Users")
+                        .HasForeignKey("Consultation.Domain.Users", "FacultyID");
+
+                    b.HasOne("Consultation.Domain.Student", "Student")
+                        .WithOne("Users")
+                        .HasForeignKey("Consultation.Domain.Users", "StudentID");
+
+                    b.Navigation("Admin");
+
+                    b.Navigation("Faculty");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("Consultation.Domain.Admin", b =>
+                {
+                    b.Navigation("Users")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Consultation.Domain.Faculty", b =>
                 {
                     b.Navigation("ConsultationRequests");
 
+                    b.Navigation("EnrolledCourse")
+                        .IsRequired();
+
+                    b.Navigation("FacultySchedule")
+                        .IsRequired();
+
+                    b.Navigation("SchoolYears");
+
+                    b.Navigation("Users")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Consultation.Domain.SchoolYear", b =>
+                {
                     b.Navigation("EnrolledCourse")
                         .IsRequired();
                 });
@@ -563,7 +659,12 @@ namespace Consultation.Infrastructure.Migrations
                 {
                     b.Navigation("ConsultationRequests");
 
+                    b.Navigation("EnrolledCourses");
+
                     b.Navigation("SchoolYears");
+
+                    b.Navigation("Users")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

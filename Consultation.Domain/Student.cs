@@ -23,9 +23,8 @@ namespace Consultation.Domain
         public int ProgramID { get; set; }
         public virtual Program Program { get; set; }
 
-        [ForeignKey(nameof(UserID))]
-        public int UserID { get; set; }
-        public virtual Users Users { get; set; }
+        [InverseProperty(nameof(Users.Student))]
+        public Users Users { get; set; }
 
         //preferable ang ICollection<> kaysa sa List<>
         public List<ConsultationRequest> ConsultationRequests { get; set; }

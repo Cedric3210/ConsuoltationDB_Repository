@@ -22,9 +22,8 @@ namespace Consultation.Domain
         public int EnrolledCourseID { get; set; }
         public virtual EnrolledCourse EnrolledCourse { get; set; }
 
-        [ForeignKey(nameof(UserID))]
-        public int UserID { get; set; }
-        public virtual Users Users { get; set; }
+        [InverseProperty(nameof(Users.Faculty))]
+        public Users Users { get; set; }
 
         //di nsd ni need na FK
         [ForeignKey(nameof(FacultyScheduleID))]

@@ -6,34 +6,20 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Consultation.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedTablesIntoNewDatabase : Migration
+    public partial class UpdatedDataTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "ActionLog",
-                columns: table => new
-                {
-                    ActionLogID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Time = table.Column<TimeOnly>(type: "time", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ActionLog", x => x.ActionLogID);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Admin",
                 columns: table => new
                 {
                     AdminID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AdminUsername = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    AdminUsername = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AdminPassword = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -73,18 +59,20 @@ namespace Consultation.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FacultySchedule",
+                name: "Faculty",
                 columns: table => new
                 {
-                    FacultyScheduleID = table.Column<int>(type: "int", nullable: false)
+                    FacultyID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TimeStart = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TimeEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Day = table.Column<int>(type: "int", nullable: false)
+                    FacultyUMID = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FacultyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EnrolledCourseID = table.Column<int>(type: "int", nullable: false),
+                    UserID = table.Column<int>(type: "int", nullable: false),
+                    FacultyScheduleID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FacultySchedule", x => x.FacultyScheduleID);
+                    table.PrimaryKey("PK_Faculty", x => x.FacultyID);
                 });
 
             migrationBuilder.CreateTable(
@@ -98,22 +86,6 @@ namespace Consultation.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Notification", x => x.NotificationNumber);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    UserID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UMID = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserPassword = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserType = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.UserID);
                 });
 
             migrationBuilder.CreateTable(
@@ -138,24 +110,24 @@ namespace Consultation.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Faculty",
+                name: "FacultySchedule",
                 columns: table => new
                 {
-                    FacultyID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FacultyUMID = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FacultyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EnrolledCourseID = table.Column<int>(type: "int", nullable: false),
                     FacultyScheduleID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TimeStart = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TimeEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Day = table.Column<int>(type: "int", nullable: false),
+                    FacultyID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Faculty", x => x.FacultyID);
+                    table.PrimaryKey("PK_FacultySchedule", x => x.FacultyScheduleID);
                     table.ForeignKey(
-                        name: "FK_Faculty_FacultySchedule_FacultyScheduleID",
-                        column: x => x.FacultyScheduleID,
-                        principalTable: "FacultySchedule",
-                        principalColumn: "FacultyScheduleID",
+                        name: "FK_FacultySchedule_Faculty_FacultyID",
+                        column: x => x.FacultyID,
+                        principalTable: "Faculty",
+                        principalColumn: "FacultyID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -189,7 +161,8 @@ namespace Consultation.Infrastructure.Migrations
                     StudentUMID = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StudentName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProgramID = table.Column<int>(type: "int", nullable: false)
+                    ProgramID = table.Column<int>(type: "int", nullable: false),
+                    UserID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -208,14 +181,14 @@ namespace Consultation.Infrastructure.Migrations
                 {
                     ConsultationID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DateSchedule = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Concern = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateRequested = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    DateSchedule = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StartedTime = table.Column<TimeOnly>(type: "time", nullable: false),
                     EndedTime = table.Column<TimeOnly>(type: "time", nullable: false),
+                    Concern = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DisapprovedReason = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SubjectCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     NotificationNumber = table.Column<int>(type: "int", nullable: false),
                     StudentID = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StudentID1 = table.Column<int>(type: "int", nullable: false),
@@ -246,12 +219,77 @@ namespace Consultation.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SchoolYear",
+                columns: table => new
+                {
+                    SchoolYearID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Year1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Year2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SchoolYearStatus = table.Column<int>(type: "int", nullable: false),
+                    Semester = table.Column<int>(type: "int", nullable: false),
+                    StudentID = table.Column<int>(type: "int", nullable: false),
+                    FacultyID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SchoolYear", x => x.SchoolYearID);
+                    table.ForeignKey(
+                        name: "FK_SchoolYear_Faculty_FacultyID",
+                        column: x => x.FacultyID,
+                        principalTable: "Faculty",
+                        principalColumn: "FacultyID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SchoolYear_Students_StudentID",
+                        column: x => x.StudentID,
+                        principalTable: "Students",
+                        principalColumn: "StudentID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    UserID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UMID = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserPassword = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserType = table.Column<int>(type: "int", nullable: false),
+                    AdminID = table.Column<int>(type: "int", nullable: true),
+                    FacultyID = table.Column<int>(type: "int", nullable: true),
+                    StudentID = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.UserID);
+                    table.ForeignKey(
+                        name: "FK_Users_Admin_AdminID",
+                        column: x => x.AdminID,
+                        principalTable: "Admin",
+                        principalColumn: "AdminID");
+                    table.ForeignKey(
+                        name: "FK_Users_Faculty_FacultyID",
+                        column: x => x.FacultyID,
+                        principalTable: "Faculty",
+                        principalColumn: "FacultyID");
+                    table.ForeignKey(
+                        name: "FK_Users_Students_StudentID",
+                        column: x => x.StudentID,
+                        principalTable: "Students",
+                        principalColumn: "StudentID");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EnrolledCourse",
                 columns: table => new
                 {
                     EnrolledCourseID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CourseCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CourseID = table.Column<int>(type: "int", nullable: false),
+                    SchoolYearID = table.Column<int>(type: "int", nullable: false),
                     StudentID = table.Column<int>(type: "int", nullable: false),
                     FacultyID = table.Column<int>(type: "int", nullable: false)
                 },
@@ -271,6 +309,12 @@ namespace Consultation.Infrastructure.Migrations
                         principalColumn: "FacultyID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_EnrolledCourse_SchoolYear_SchoolYearID",
+                        column: x => x.SchoolYearID,
+                        principalTable: "SchoolYear",
+                        principalColumn: "SchoolYearID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_EnrolledCourse_Students_StudentID",
                         column: x => x.StudentID,
                         principalTable: "Students",
@@ -279,34 +323,32 @@ namespace Consultation.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SchoolYear",
+                name: "ActionLog",
                 columns: table => new
                 {
-                    SchoolYearID = table.Column<int>(type: "int", nullable: false)
+                    ActionLogID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Year1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Year2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SchoolYearStatus = table.Column<int>(type: "int", nullable: false),
-                    Semester = table.Column<int>(type: "int", nullable: false),
-                    FacultyID = table.Column<int>(type: "int", nullable: false),
-                    EnrolledCourseID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    StudentID = table.Column<int>(type: "int", nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Time = table.Column<TimeOnly>(type: "time", nullable: false),
+                    UserID = table.Column<int>(type: "int", nullable: false),
+                    UsersUserID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SchoolYear", x => x.SchoolYearID);
+                    table.PrimaryKey("PK_ActionLog", x => x.ActionLogID);
                     table.ForeignKey(
-                        name: "FK_SchoolYear_EnrolledCourse_EnrolledCourseID",
-                        column: x => x.EnrolledCourseID,
-                        principalTable: "EnrolledCourse",
-                        principalColumn: "EnrolledCourseID",
+                        name: "FK_ActionLog_Users_UsersUserID",
+                        column: x => x.UsersUserID,
+                        principalTable: "Users",
+                        principalColumn: "UserID",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SchoolYear_Students_StudentID",
-                        column: x => x.StudentID,
-                        principalTable: "Students",
-                        principalColumn: "StudentID");
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ActionLog_UsersUserID",
+                table: "ActionLog",
+                column: "UsersUserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ConsultationRequest_FacultyID1",
@@ -340,14 +382,21 @@ namespace Consultation.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_EnrolledCourse_SchoolYearID",
+                table: "EnrolledCourse",
+                column: "SchoolYearID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_EnrolledCourse_StudentID",
                 table: "EnrolledCourse",
                 column: "StudentID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Faculty_FacultyScheduleID",
-                table: "Faculty",
-                column: "FacultyScheduleID");
+                name: "IX_FacultySchedule_FacultyID",
+                table: "FacultySchedule",
+                column: "FacultyID",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Program_DepartmentID",
@@ -355,9 +404,9 @@ namespace Consultation.Infrastructure.Migrations
                 column: "DepartmentID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SchoolYear_EnrolledCourseID",
+                name: "IX_SchoolYear_FacultyID",
                 table: "SchoolYear",
-                column: "EnrolledCourseID");
+                column: "FacultyID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SchoolYear_StudentID",
@@ -368,6 +417,27 @@ namespace Consultation.Infrastructure.Migrations
                 name: "IX_Students_ProgramID",
                 table: "Students",
                 column: "ProgramID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_AdminID",
+                table: "Users",
+                column: "AdminID",
+                unique: true,
+                filter: "[AdminID] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_FacultyID",
+                table: "Users",
+                column: "FacultyID",
+                unique: true,
+                filter: "[FacultyID] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_StudentID",
+                table: "Users",
+                column: "StudentID",
+                unique: true,
+                filter: "[StudentID] IS NOT NULL");
         }
 
         /// <inheritdoc />
@@ -377,16 +447,16 @@ namespace Consultation.Infrastructure.Migrations
                 name: "ActionLog");
 
             migrationBuilder.DropTable(
-                name: "Admin");
-
-            migrationBuilder.DropTable(
                 name: "Bulletin");
 
             migrationBuilder.DropTable(
                 name: "ConsultationRequest");
 
             migrationBuilder.DropTable(
-                name: "SchoolYear");
+                name: "EnrolledCourse");
+
+            migrationBuilder.DropTable(
+                name: "FacultySchedule");
 
             migrationBuilder.DropTable(
                 name: "Users");
@@ -395,19 +465,19 @@ namespace Consultation.Infrastructure.Migrations
                 name: "Notification");
 
             migrationBuilder.DropTable(
-                name: "EnrolledCourse");
+                name: "Courses");
 
             migrationBuilder.DropTable(
-                name: "Courses");
+                name: "SchoolYear");
+
+            migrationBuilder.DropTable(
+                name: "Admin");
 
             migrationBuilder.DropTable(
                 name: "Faculty");
 
             migrationBuilder.DropTable(
                 name: "Students");
-
-            migrationBuilder.DropTable(
-                name: "FacultySchedule");
 
             migrationBuilder.DropTable(
                 name: "Program");

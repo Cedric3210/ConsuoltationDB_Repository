@@ -12,8 +12,6 @@ namespace Consultation.Domain
     public class Users
     {
         
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-
         [Key]
         public int UserID { get; set; }
         
@@ -24,11 +22,19 @@ namespace Consultation.Domain
         public string UserEmail { get; set; }
 
         public UserType UserType { get; set; }
-        
-        public virtual Admin Admin { get; set; }
-        public virtual Student Student { get; set; }
-        public virtual Faculty Faculty { get; set; }
-        
+
+        public int? AdminID { get; set; }
+        [ForeignKey(nameof(AdminID)), InverseProperty(nameof(Admin.Users))]
+        public Admin? Admin { get; set; }
+
+        public int? FacultyID { get; set; }
+        [ForeignKey(nameof(FacultyID)), InverseProperty(nameof(Faculty.Users))]
+        public Faculty? Faculty { get; set; }
+
+        public int? StudentID { get; set; }
+        [ForeignKey(nameof(StudentID)), InverseProperty(nameof(Student.Users))]
+        public Student? Student { get; set; }
+
         //add sd ni
         //public ICollection<ActionLog> ActionLogs { get; set; }
     }
