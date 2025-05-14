@@ -21,35 +21,38 @@ namespace FlutterAPI.Controllers
         }
 
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetConsultationRequest(int id)
+        [HttpGet]
+        public async Task<IActionResult> GetAllConsultationRequests()
         {
-            var request = await _context.ConsultationRequest
+            var requests = await _context.ConsultationRequest
                 .Include(c => c.Student)
                     .ThenInclude(s => s.EnrolledCourses)
-                .FirstOrDefaultAsync(c => c.ConsultationID == id);
+                .ToListAsync();
 
-            if (request == null)
+            if (requests == null || !requests.Any())
             {
-                return NotFound(new { Message = "Consultation request not found." });
+                return NotFound(new { Message = "No consultation requests found." });
             }
 
-            // Assuming a student can have multiple enrolled courses, pick the first one or improve logic as needed
-            var enrolledCourse = request.Student.EnrolledCourses.FirstOrDefault();
-
-            var response = new ConsultationRequestViewModel
+            var responses = requests.Select(request =>
             {
-                ConsultationID = request.ConsultationID,
-                CourseCode = enrolledCourse?.CourseCode ?? "N/A",
-                StudentName = request.Student.StudentName,
-                DateSchedule = request.DateSchedule,
-                TimeStart = request.StartedTime,
-                TimeEnd = request.EndedTime,
-                Status = request.Status
-            };
+                var enrolledCourse = request.Student.EnrolledCourses.FirstOrDefault();
 
-            return Ok(response);
+                return new ConsultationRequestViewModel
+                {
+                    ConsultationID = request.ConsultationID,
+                    CourseCode = enrolledCourse?.CourseCode ?? "N/A",
+                    StudentName = request.Student.StudentName,
+                    DateSchedule = request.DateSchedule,
+                    TimeStart = request.StartedTime,
+                    TimeEnd = request.EndedTime,
+                    Status = request.Status
+                };
+            }).ToList();
+
+            return Ok(responses);
         }
+
         [HttpPut("api/consultation-requests/{id}/status")]
         public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateStatusModel usm)
         {
