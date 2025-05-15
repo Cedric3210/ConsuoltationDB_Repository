@@ -16,16 +16,6 @@ namespace FlutterAPI.Controllers
                 Date = DateTime.Now,
                 Description = message,
                 Time = TimeOnly.FromDateTime(DateTime.Now),
-                //UserType = UserType,
-                //Users = UserType == UserType.Student ? new Users
-                //{
-                //    StudentID = AccountName,
-                //    UserType = UserType
-                //} : new Users
-                //{
-                //    FacultyName = AccountName,
-                //    UserType = UserType
-                //}
 
             };
             return viewModel;
