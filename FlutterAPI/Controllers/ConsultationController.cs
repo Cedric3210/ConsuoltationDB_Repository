@@ -1,4 +1,5 @@
 ﻿using Consultation.Domain;
+using Consultation.Domain.Enum;
 using Consultation.Infrastructure.Data;
 using Enum;
 using FlutterAPI.ViewModel;
@@ -19,7 +20,7 @@ namespace FlutterAPI.Controllers
 
         //Screen 3.1 API
         [HttpPost]
-        public IActionResult RequestConsulation([FromBody] ConsultationViewModel ConsultationRequest)
+        public IActionResult RequestConsultation([FromBody] ConsultationViewModel ConsultationRequest)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -116,7 +117,7 @@ namespace FlutterAPI.Controllers
 
             string schoolYearString = $"{semesterString} {currentSchoolYear.Year1}-{currentSchoolYear.Year2}";
 
-            var courses = student.EnrolledCourses.Select(ec => new CourseInfo
+            var courses = student.EnrolledCourses.Select(ec => new CourseInfoViewModel
             {
                 Code = ec.CourseCode,
                 Course = ec.Course.CourseName,
@@ -128,6 +129,18 @@ namespace FlutterAPI.Controllers
                 SchoolYear = schoolYearString,
                 Courses = courses
             };
+
+
+            var log = ActionLogController.ActionLogInput(
+                "Consultation Request has been viewed",
+                student.StudentName,
+                UserType.Student,
+                student.StudentID
+            );
+
+            _context.ActionLog.Add(log);
+            _context.SaveChanges();
+
 
             return Ok(result);
 
