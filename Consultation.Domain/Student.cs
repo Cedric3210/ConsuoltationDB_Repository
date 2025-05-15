@@ -22,15 +22,14 @@ namespace Consultation.Domain
         [ForeignKey(nameof(ProgramID))]
         public int ProgramID { get; set; }
         public virtual Program Program { get; set; }
-
-        [InverseProperty(nameof(Users.Student))]
-        public Users Users { get; set; }
-
-        //preferable ang ICollection<> kaysa sa List<>
         public List<ConsultationRequest> ConsultationRequests { get; set; }
         public List<SchoolYear> SchoolYears { get; set; }
 
-        //d nmn ata ni needed
+        [ForeignKey(nameof(UserID))]
+
+        public string UserID { get; set; }
+        public Users Users { get; set; }
+
         public List<EnrolledCourse> EnrolledCourses { get; set; }
     }
 }

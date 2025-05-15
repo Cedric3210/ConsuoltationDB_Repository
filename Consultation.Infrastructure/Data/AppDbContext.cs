@@ -1,4 +1,5 @@
 ﻿using Consultation.Domain;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,8 +9,16 @@ using System.Threading.Tasks;
 
 namespace Consultation.Infrastructure.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<Users>
     {
+        public AppDbContext() : base()
+        {
+        }
+        
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+                : base(options)
+        {
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //Connection string of the Azure: 
@@ -17,22 +26,14 @@ namespace Consultation.Infrastructure.Data
 
 
             optionsBuilder.UseSqlServer("Server=tcp:consultationserver.database.windows.net,1433;" +
-                "Initial Catalog=ConsultationDatabase;Persist Security Info=False;" +
+                "Initial Catalog=ConsultationDatabaseTesting;Persist Security Info=False;" +
                 "User ID=ConsultationDB;Password=ServerAdmin123;" +
                 "MultipleActiveResultSets=False;" +
                 "Encrypt=True;" +
                 "TrustServerCertificate=False;Connection Timeout=30;");
             base.OnConfiguring(optionsBuilder);
         }
-        public AppDbContext(DbContextOptions<AppDbContext> options)
-        : base(options)
-        {
-        }
-
-        public AppDbContext()
-        {
-        }
-
+  
         public DbSet<ActionLog> ActionLog { get; set; }
         public DbSet<Admin> Admin { get; set; }
         public DbSet<Bulletin> Bulletin { get; set; }

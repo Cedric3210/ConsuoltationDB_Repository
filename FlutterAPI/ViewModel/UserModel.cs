@@ -6,21 +6,23 @@ namespace FlutterAPI.ViewModel
 {
     public class UserModel
     {
-        [Key]
+       
         public int UserID { get; set; }
+
+        [Required, EmailAddress]
         public string UserEmail { get; set; }
 
+        [Required]
         public string UMID { get; set; }
 
+        [Required]
         public string UserPassword { get; set; }
         public UserType UserType { get; set; }
 
-        public Admin Admin { get; set; }
+        public int AdminID { get; set; }
 
-        public Faculty Faculty { get; set; }
+        public int FacultyID { get; set; }
 
-        public Student Student { get; set; }
-
-
+        public int StudentID { get; set; }
     }
 }

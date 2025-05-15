@@ -16,14 +16,17 @@ namespace Consultation.Domain
         public string FacultyUMID { get; set; }
   
         public string FacultyName { get; set; }
-        
+
+        [ForeignKey(nameof(UserID))]
+
+        public string UserID { get; set; }
+        public Users Users { get; set; }
+
+
         //not needed
         [ForeignKey(nameof(EnrolledCourseID))]
         public int EnrolledCourseID { get; set; }
         public virtual EnrolledCourse EnrolledCourse { get; set; }
-
-        [InverseProperty(nameof(Users.Faculty))]
-        public Users Users { get; set; }
 
         //di nsd ni need na FK
         [ForeignKey(nameof(FacultyScheduleID))]

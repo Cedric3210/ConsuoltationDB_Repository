@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Consultation.Domain;
@@ -15,42 +12,51 @@ namespace FlutterAPI.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
+
+        private readonly UserManager<Users> _userManager;
+        private readonly SignInManager<Users> _signInManager;
+
         private readonly AppDbContext _context;
 
-        public AuthenticationController(AppDbContext context)
+        public AuthenticationController(AppDbContext context,
+            UserManager<Users> UserManager, SignInManager<Users> SignInManager)
         {
+            _userManager = UserManager;
+            _signInManager = SignInManager;
             _context = context;
         }
 
         //Register Controller
         [HttpPost]
-        public async Task<IActionResult> RegisterPerson([FromBody] UserModel Users)
+        public async Task<IActionResult> UserRegister([FromBody] UserModel UserModel)
         {
-            var existingUser = await _context.Users
-                .FirstOrDefaultAsync(u => u.UserEmail == Users.UserEmail);
 
-            if (existingUser != null)
-            {
-                return BadRequest("Account has been Register");
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            var student = new Users
+            //user instance
+            var users = new Users
             {
-                UserPassword = Users.UserPassword,
-                UserEmail = Users.UserEmail,
-                UMID = Users.UMID,
-               
+                UserName = UserModel.UserEmail,
+                Email = UserModel.UserEmail,
+                UMID = UserModel.UMID,
             };
 
-            //_context.ActionLog.Add(new ActionLog
-            //{
-            //    ActionLogID = 0,
-            //    Description = "Account has been Added",
-            //    Date = DateTime.Now,
-            //    Time = TimeOnly.FromDateTime(DateTime.Now)
-            //});
+            //hasher
+            var hasher = await _userManager.CreateAsync(users, UserModel.UserPassword);
 
-            _context.Users.Add(student);
+            //Conditional statement for the hasher
+            if(!hasher.Succeeded)
+                return BadRequest(hasher.Errors);
+           
+
+            //ActionLog instance
+            string message = $"{UserModel.UserEmail} has registered";
+            var actionlog = ActionLogController.
+                ActionLogInput(message, UserModel.UserEmail, UserModel.UserType, 
+                UserModel.UserID);
+
+            _context.ActionLog.Add(actionlog);
             await _context.SaveChangesAsync();
 
             return Ok("Registration successful");
@@ -58,34 +64,28 @@ namespace FlutterAPI.Controllers
 
         //Log-in Controller
         [HttpPost]
-        public IActionResult Login([FromBody] UserModel Users)
+        public async Task<IActionResult> Login([FromBody] UserModel UsersModel)
         {
+            //Query for the hasher and user
+             var result = await _signInManager.PasswordSignInAsync(
+            UsersModel.UserEmail, UsersModel.UserPassword, isPersistent: false, lockoutOnFailure: false);
 
-            if (Users == null || string.IsNullOrEmpty(Users.UserEmail) || string.IsNullOrEmpty(Users.UserPassword))
-                return BadRequest("Username and password are required.");
+            if (!result.Succeeded)
+                return Unauthorized("Invalid Username and Password");
 
-            var user = _context.Users.FirstOrDefault(u => u.UserEmail == Users.UserEmail);
+            //Action Log instance
+            string message = $"{UsersModel.UserEmail} has logged in";
+            var actionlog = ActionLogController.ActionLogInput(message, UsersModel.UserEmail, UsersModel.UserType, UsersModel.UserID);
 
-            if (!IsValidUser(Users.UserEmail, Users.UserPassword))
-                return Unauthorized("Wrong Email and Password.");
-
-            string message = $"{Users.UserEmail} has logged in";
-            var actionlog = ActionLogController.ActionLogInput(message, Users.UserEmail, Users.UserType, Users.UserID);
+            //Add action log to the databases
             _context.ActionLog.Add(actionlog);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return Ok(new
             {
                 message = "Login successful",
-                username = user.UserEmail
+                username = UsersModel.UserEmail
             });
-        }
-
-        //This query is used to check if the user is valid
-        private bool IsValidUser(string username, string password)
-        {
-            var userValid = _context.Users.FirstOrDefault(u => u.UserEmail == username);
-            return userValid != null && userValid.UserPassword == password;
         }
     }
 }

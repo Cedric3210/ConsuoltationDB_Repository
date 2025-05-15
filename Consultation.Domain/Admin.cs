@@ -12,12 +12,10 @@ namespace Consultation.Domain
     {
         [Key]
         public int AdminID {  get; set; }
-        
-        public string AdminUsername { get; set; }
 
-        public string AdminPassword { get; set; }
+        [ForeignKey(nameof(UserID))]
 
-        [InverseProperty(nameof(Users.Admin))]
+        public string UserID { get; set; }
         public Users Users { get; set; }
     }
 }
