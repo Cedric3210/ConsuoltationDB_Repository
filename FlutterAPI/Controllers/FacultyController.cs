@@ -10,12 +10,12 @@ namespace FlutterAPI.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class ApprovedDisapprovedController : ControllerBase
+    public class FacultyController : ControllerBase
     {
 
         private readonly AppDbContext _context;
 
-        public ApprovedDisapprovedController(AppDbContext context)
+        public FacultyController(AppDbContext context)
         {
             _context = context;
         }
@@ -51,7 +51,6 @@ namespace FlutterAPI.Controllers
             }).ToList();
 
 
-
             return Ok(responses);
         }
 
@@ -73,6 +72,5 @@ namespace FlutterAPI.Controllers
 
             return Ok(request);
         }
-
     }
 }
