@@ -28,7 +28,7 @@ namespace FlutterAPI.Controllers
 
         //Register Controller
         [HttpPost]
-        public async Task<IActionResult> UserRegister([FromBody] UserModel UserModel)
+        public async Task<IActionResult> UserRegister([FromBody] UserViewModel UserModel)
         {
 
             if (!ModelState.IsValid)
@@ -40,6 +40,7 @@ namespace FlutterAPI.Controllers
                 UserName = UserModel.UserEmail,
                 Email = UserModel.UserEmail,
                 UMID = UserModel.UMID,
+                UserType = UserModel.UserType,
             };
 
             //hasher
@@ -48,15 +49,47 @@ namespace FlutterAPI.Controllers
             //Conditional statement for the hasher
             if(!hasher.Succeeded)
                 return BadRequest(hasher.Errors);
-           
+
+
+            //switch statement for the usertype is student,fauclty or admin who register
+            switch ((int)UserModel.UserType)
+            {
+                case 0:
+                    var student = new Student
+                    {
+                        StudentUMID = UserModel.UMID,
+                        StudentName = UserModel.StudentName,
+                        StudentID = 0,
+                        Email = UserModel.UserEmail,
+                        Users = users,
+                        ProgramID = 1, 
+                    };
+                    _context.Students.Add(student);
+                    break;
+                case 1:
+                    var Faculty = new Faculty
+                    {
+                        FacultyUMID= UserModel.UMID,
+                        FacultyName = UserModel.FacultyName,
+                        FacultyID = 0,
+                        Users = users
+                    };
+                    _context.Faculty.Add(Faculty);
+                    break;
+                default:
+                    return BadRequest("Invalid User Type");
+            }
+
 
             //ActionLog instance
             string message = $"{UserModel.UserEmail} has registered";
-            var actionlog = ActionLogController.
-                ActionLogInput(message, UserModel.UserEmail, UserModel.UserType, 
-                UserModel.UserID);
+            var actionlogs = new ActionLogController(_context);
+            var actionlog = actionlogs.
+                ActionLogAunthentication(message, UserModel.UserEmail, UserModel.UserType,
+                users, UserModel.UserID);
 
             _context.ActionLog.Add(actionlog);
+
             await _context.SaveChangesAsync();
 
             return Ok("Registration successful");
@@ -64,7 +97,7 @@ namespace FlutterAPI.Controllers
 
         //Log-in Controller
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] UserModel UsersModel)
+        public async Task<IActionResult> Login([FromBody] UserViewModel UsersModel)
         {
             //Query for the hasher and user
              var result = await _signInManager.PasswordSignInAsync(
@@ -74,12 +107,16 @@ namespace FlutterAPI.Controllers
                 return Unauthorized("Invalid Username and Password");
 
             //Action Log instance
-            string message = $"{UsersModel.UserEmail} has logged in";
-            var actionlog = ActionLogController.ActionLogInput(message, UsersModel.UserEmail, UsersModel.UserType, UsersModel.UserID);
+            //string message = $"{UsersModel.UserEmail} has logged in";
 
-            //Add action log to the databases
-            _context.ActionLog.Add(actionlog);
-            await _context.SaveChangesAsync();
+            //var actionlogs = new ActionLogController(_context);
+            //var actionlog = actionlogs.ActionLogInput(message, UsersModel.UserEmail, UsersModel.UserType, UsersModel.UserID);
+
+
+
+            ////Add action log to the databases
+            //_context.ActionLog.Add(actionlog);
+            //await _context.SaveChangesAsync();
 
             return Ok(new
             {

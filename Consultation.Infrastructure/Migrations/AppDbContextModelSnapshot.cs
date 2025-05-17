@@ -40,9 +40,6 @@ namespace Consultation.Infrastructure.Migrations
                     b.Property<TimeOnly>("Time")
                         .HasColumnType("time");
 
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
                     b.Property<string>("UsersId")
                         .HasColumnType("nvarchar(450)");
 
@@ -61,7 +58,7 @@ namespace Consultation.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdminID"));
 
-                    b.Property<string>("UserID")
+                    b.Property<string>("AdminName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -150,11 +147,7 @@ namespace Consultation.Infrastructure.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<string>("StudentID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StudentID1")
+                    b.Property<int>("StudentID")
                         .HasColumnType("int");
 
                     b.Property<string>("SubjectCode")
@@ -167,7 +160,7 @@ namespace Consultation.Infrastructure.Migrations
 
                     b.HasIndex("NotificationNumber");
 
-                    b.HasIndex("StudentID1");
+                    b.HasIndex("StudentID");
 
                     b.ToTable("ConsultationRequest");
                 });
@@ -278,10 +271,6 @@ namespace Consultation.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("FacultyUMID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserID")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -423,10 +412,6 @@ namespace Consultation.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StudentUMID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserID")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -681,7 +666,7 @@ namespace Consultation.Infrastructure.Migrations
 
                     b.HasOne("Consultation.Domain.Student", "Student")
                         .WithMany("ConsultationRequests")
-                        .HasForeignKey("StudentID1")
+                        .HasForeignKey("StudentID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

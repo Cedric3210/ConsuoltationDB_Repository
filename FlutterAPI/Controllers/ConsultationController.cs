@@ -45,8 +45,8 @@ namespace FlutterAPI.Controllers
 
             var consultation = new ConsultationRequest
             {
-                StudentID = student.StudentUMID,
-                FacultyID = faculty.FacultyUMID,
+                Student = student,
+                Faculty = faculty,
                 SubjectCode = ConsultationRequest.CourseCode,
                 DateSchedule = ConsultationRequest.DateOfConsultation,
                 DisapprovedReason = ConsultationRequest.DisapprovedReason,
@@ -58,25 +58,25 @@ namespace FlutterAPI.Controllers
 
             _context.ConsultationRequest.Add(consultation);
 
-            _context.ActionLog.Add(new ActionLog
-            {
-                Description = "Consultation Request",
-                Date = DateTime.Now,
-                Time = TimeOnly.FromDateTime(DateTime.Now)
-            });
-            _context.SaveChanges();
+            //string message = $"{student.StudentName} has Request Consultation";
+            //var actionlogs = new ActionLogController(_context);
+            //var actionlog = actionlogs.ActionLogInput(message, student.StudentName, ConsultationRequest.Usertype, student.StudentID.ToString());
+
+
+            //_context.ActionLog.Add(actionlog);
+            //_context.SaveChanges();
 
             return Ok(new { message = "Action Successful" });
         }
 
         //Screen 4 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ConsultationRequest>>> ShowConsultation(string studentId)
+        public async Task<ActionResult<IEnumerable<ConsultationRequest>>> ShowConsultation(int studentId)
         {
             var result = await _context.ConsultationRequest
             .Include(s => s.Student)
              .Include(s => s.Faculty)
-             .Where(s => s.StudentID == studentId.ToString())
+             .Where(s => s.Student.StudentID == studentId)
                .ToListAsync();
             return Ok(result);
         }

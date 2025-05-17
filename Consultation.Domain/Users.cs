@@ -17,7 +17,9 @@ namespace Consultation.Domain
         public string UMID { get; set; }
         public UserType UserType { get; set; }
 
+        //public virtual Student Student { get; set; }
+        //public virtual Faculty Faculty { get; set; }
+        //public virtual Admin Admin { get; set; }
 
- 
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Consultation.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialDb : Migration
+    public partial class CreateTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -127,7 +127,6 @@ namespace Consultation.Infrastructure.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Time = table.Column<TimeOnly>(type: "time", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: false),
                     UsersId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -146,7 +145,7 @@ namespace Consultation.Infrastructure.Migrations
                 {
                     AdminID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserID = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AdminName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UsersId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -252,7 +251,6 @@ namespace Consultation.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FacultyUMID = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FacultyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserID = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UsersId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     EnrolledCourseID = table.Column<int>(type: "int", nullable: false),
                     FacultyScheduleID = table.Column<int>(type: "int", nullable: false)
@@ -294,8 +292,8 @@ namespace Consultation.Infrastructure.Migrations
                 {
                     FacultyScheduleID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TimeStart = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TimeEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TimeStart = table.Column<TimeOnly>(type: "time", nullable: false),
+                    TimeEnd = table.Column<TimeOnly>(type: "time", nullable: false),
                     Day = table.Column<int>(type: "int", nullable: false),
                     FacultyID = table.Column<int>(type: "int", nullable: false)
                 },
@@ -341,7 +339,6 @@ namespace Consultation.Infrastructure.Migrations
                     StudentName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProgramID = table.Column<int>(type: "int", nullable: false),
-                    UserID = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UsersId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -375,8 +372,7 @@ namespace Consultation.Infrastructure.Migrations
                     SubjectCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     NotificationNumber = table.Column<int>(type: "int", nullable: false),
-                    StudentID = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StudentID1 = table.Column<int>(type: "int", nullable: false),
+                    StudentID = table.Column<int>(type: "int", nullable: false),
                     FacultyID = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FacultyID1 = table.Column<int>(type: "int", nullable: false)
                 },
@@ -396,8 +392,8 @@ namespace Consultation.Infrastructure.Migrations
                         principalColumn: "NotificationNumber",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ConsultationRequest_Students_StudentID1",
-                        column: x => x.StudentID1,
+                        name: "FK_ConsultationRequest_Students_StudentID",
+                        column: x => x.StudentID,
                         principalTable: "Students",
                         principalColumn: "StudentID",
                         onDelete: ReferentialAction.Cascade);
@@ -458,7 +454,7 @@ namespace Consultation.Infrastructure.Migrations
                         column: x => x.FacultyID,
                         principalTable: "Faculty",
                         principalColumn: "FacultyID",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_EnrolledCourse_SchoolYear_SchoolYearID",
                         column: x => x.SchoolYearID,
@@ -533,9 +529,9 @@ namespace Consultation.Infrastructure.Migrations
                 column: "NotificationNumber");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ConsultationRequest_StudentID1",
+                name: "IX_ConsultationRequest_StudentID",
                 table: "ConsultationRequest",
-                column: "StudentID1");
+                column: "StudentID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Courses_ProgramID",

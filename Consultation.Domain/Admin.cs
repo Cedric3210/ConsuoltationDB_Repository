@@ -12,10 +12,7 @@ namespace Consultation.Domain
     {
         [Key]
         public int AdminID {  get; set; }
-
-        [ForeignKey(nameof(UserID))]
-
-        public string UserID { get; set; }
+        public string AdminName { get; set; }
         public Users Users { get; set; }
     }
 }

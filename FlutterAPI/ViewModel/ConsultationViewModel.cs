@@ -1,4 +1,6 @@
-﻿namespace FlutterAPI.ViewModel
+﻿using Consultation.Domain.Enum;
+
+namespace FlutterAPI.ViewModel
 {
     public class ConsultationViewModel
     {
@@ -14,6 +16,8 @@
 
         public DateTime DateOfConsultation { get; set; }
 
-        
+        public UserType Usertype { get; set; }
+
+
     }
 }

@@ -25,9 +25,6 @@ namespace Consultation.Domain
         public List<ConsultationRequest> ConsultationRequests { get; set; }
         public List<SchoolYear> SchoolYears { get; set; }
 
-        [ForeignKey(nameof(UserID))]
-
-        public string UserID { get; set; }
         public Users Users { get; set; }
 
         public List<EnrolledCourse> EnrolledCourses { get; set; }

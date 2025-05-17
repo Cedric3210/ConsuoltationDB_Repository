@@ -19,9 +19,6 @@ namespace Consultation.Domain
         public DateTime Date { get; set; }
 
         public TimeOnly Time { get; set; }
-
-        [ForeignKey(nameof(UserID))]
-        public int UserID { get; set; }
         public virtual Users Users { get; set; }
     }
 }

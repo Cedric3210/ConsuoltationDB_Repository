@@ -26,7 +26,7 @@ namespace Consultation.Infrastructure.Data
 
 
             optionsBuilder.UseSqlServer("Server=tcp:consultationserver.database.windows.net,1433;" +
-                "Initial Catalog=ConsultationDatabaseTesting;Persist Security Info=False;" +
+                "Initial Catalog=ConsultationDatabaseTesting1;Persist Security Info=False;" +
                 "User ID=ConsultationDB;Password=ServerAdmin123;" +
                 "MultipleActiveResultSets=False;" +
                 "Encrypt=True;" +

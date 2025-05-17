@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Consultation.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250514070700_InitialDb")]
-    partial class InitialDb
+    [Migration("20250517074031_CreateTables")]
+    partial class CreateTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,9 +43,6 @@ namespace Consultation.Infrastructure.Migrations
                     b.Property<TimeOnly>("Time")
                         .HasColumnType("time");
 
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
                     b.Property<string>("UsersId")
                         .HasColumnType("nvarchar(450)");
 
@@ -64,7 +61,7 @@ namespace Consultation.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdminID"));
 
-                    b.Property<string>("UserID")
+                    b.Property<string>("AdminName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -153,11 +150,7 @@ namespace Consultation.Infrastructure.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<string>("StudentID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StudentID1")
+                    b.Property<int>("StudentID")
                         .HasColumnType("int");
 
                     b.Property<string>("SubjectCode")
@@ -170,7 +163,7 @@ namespace Consultation.Infrastructure.Migrations
 
                     b.HasIndex("NotificationNumber");
 
-                    b.HasIndex("StudentID1");
+                    b.HasIndex("StudentID");
 
                     b.ToTable("ConsultationRequest");
                 });
@@ -284,10 +277,6 @@ namespace Consultation.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("UsersId")
                         .HasColumnType("nvarchar(450)");
 
@@ -312,11 +301,11 @@ namespace Consultation.Infrastructure.Migrations
                     b.Property<int>("FacultyID")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("TimeEnd")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeOnly>("TimeEnd")
+                        .HasColumnType("time");
 
-                    b.Property<DateTime>("TimeStart")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeOnly>("TimeStart")
+                        .HasColumnType("time");
 
                     b.HasKey("FacultyScheduleID");
 
@@ -426,10 +415,6 @@ namespace Consultation.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StudentUMID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserID")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -684,7 +669,7 @@ namespace Consultation.Infrastructure.Migrations
 
                     b.HasOne("Consultation.Domain.Student", "Student")
                         .WithMany("ConsultationRequests")
-                        .HasForeignKey("StudentID1")
+                        .HasForeignKey("StudentID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
