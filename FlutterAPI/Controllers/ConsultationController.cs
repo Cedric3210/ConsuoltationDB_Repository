@@ -131,15 +131,15 @@ namespace FlutterAPI.Controllers
             };
 
 
-            var log = ActionLogController.ActionLogInput(
-                "Consultation Request has been viewed",
-                student.StudentName,
-                UserType.Student,
-                student.StudentID
-            );
+            //var log = ActionLogController.ActionLogInput(
+            //    "Consultation Request has been viewed",
+            //    student.StudentName,
+            //    UserType.Student,
+            //    student.StudentID
+            //);
 
-            _context.ActionLog.Add(log);
-            _context.SaveChanges();
+            //_context.ActionLog.Add(log);
+            //_context.SaveChanges();
 
 
             return Ok(result);
