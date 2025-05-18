@@ -71,10 +71,18 @@ namespace FlutterAPI.Controllers
                     {
                         FacultyUMID= UserModel.UMID,
                         FacultyName = UserModel.FacultyName,
-                        FacultyID = 0,
+                        FacultyID = 1,
                         Users = users
                     };
                     _context.Faculty.Add(Faculty);
+                    break;
+                case 2:
+                    var admin = new Admin
+                    {
+                        AdminName = UserModel.UserEmail,
+                        AdminID = 2,
+                        Users = users
+                    };
                     break;
                 default:
                     return BadRequest("Invalid User Type");
@@ -82,13 +90,11 @@ namespace FlutterAPI.Controllers
 
 
             //ActionLog instance
-            string message = $"{UserModel.UserEmail} has registered";
-            var actionlogs = new ActionLogController(_context);
-            var actionlog = actionlogs.
-                ActionLogAunthentication(message, UserModel.UserEmail, UserModel.UserType,
-                users, UserModel.UserID);
-
-            _context.ActionLog.Add(actionlog);
+            string message = $"{UserModel.UserEmail} has been registered";
+            var actionlogs = ActionLogController.ActionLogger(message, UserModel.UserEmail, UserModel.UserType,
+                users); 
+  
+            _context.ActionLog.Add(actionlogs);
 
             await _context.SaveChangesAsync();
 
@@ -107,16 +113,7 @@ namespace FlutterAPI.Controllers
                 return Unauthorized("Invalid Username and Password");
 
             //Action Log instance
-            //string message = $"{UsersModel.UserEmail} has logged in";
-
-            //var actionlogs = new ActionLogController(_context);
-            //var actionlog = actionlogs.ActionLogInput(message, UsersModel.UserEmail, UsersModel.UserType, UsersModel.UserID);
-
-
-
-            ////Add action log to the databases
-            //_context.ActionLog.Add(actionlog);
-            //await _context.SaveChangesAsync();
+     
 
             return Ok(new
             {

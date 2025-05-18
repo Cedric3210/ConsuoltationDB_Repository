@@ -46,6 +46,11 @@ namespace FlutterAPI.Controllers
                 PendingConsultation = student.ConsultationRequests.Where(c => c.Status == Consultation.Domain.Enum.Status.Pending).Count(),
                 Notifications = notifications
             };
+            string message = $"{student.StudentName} has accessed the dashboard";
+            var actionLog = ActionLogController.ActionLogger(message, student.StudentName,0, student.Users);
+
+            _context.ActionLog.Add(actionLog);
+            _context.SaveChanges();
 
             return Ok(dashboardVM);
         }

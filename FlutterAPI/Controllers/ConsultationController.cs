@@ -58,13 +58,11 @@ namespace FlutterAPI.Controllers
 
             _context.ConsultationRequest.Add(consultation);
 
-            //string message = $"{student.StudentName} has Request Consultation";
-            //var actionlogs = new ActionLogController(_context);
-            //var actionlog = actionlogs.ActionLogInput(message, student.StudentName, ConsultationRequest.Usertype, student.StudentID.ToString());
+            string message = $"{student.StudentName} has Request Consultation";
+            var actionlogs = ActionLogController.ActionLogger(message, student.StudentName, 0, student.Users);
 
-
-            //_context.ActionLog.Add(actionlog);
-            //_context.SaveChanges();
+            _context.ActionLog.Add(actionlogs);
+            _context.SaveChanges();
 
             return Ok(new { message = "Action Successful" });
         }
@@ -130,23 +128,14 @@ namespace FlutterAPI.Controllers
                 Courses = courses
             };
 
+            string message = $"{student.StudentName} has Request Consultation";
+            var actionlogs = ActionLogController.ActionLogger(message, student.StudentName, 0, student.Users);
 
-            //var log = ActionLogController.ActionLogInput(
-            //    "Consultation Request has been viewed",
-            //    student.StudentName,
-            //    UserType.Student,
-            //    student.StudentID
-            //);
-
-            //_context.ActionLog.Add(log);
-            //_context.SaveChanges();
-
+            _context.ActionLog.Add(actionlogs);
+            _context.SaveChanges();
 
             return Ok(result);
 
         }
-
-
-
     }
 }
