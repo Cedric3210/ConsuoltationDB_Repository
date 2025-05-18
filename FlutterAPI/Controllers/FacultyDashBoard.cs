@@ -10,20 +10,13 @@ namespace FlutterAPI.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-<<<<<<< HEAD:FlutterAPI/Controllers/FacultyController.cs
-    public class FacultyController : ControllerBase
-=======
-    public class FacultyDashBoard : ControllerBase
->>>>>>> Added and change name, ready nani data nalang kulang:FlutterAPI/Controllers/FacultyDashBoard.cs
-    {
 
+    public class FacultyDashboard : ControllerBase
+    {
         private readonly AppDbContext _context;
 
-<<<<<<< HEAD:FlutterAPI/Controllers/FacultyController.cs
-        public FacultyController(AppDbContext context)
-=======
-        public FacultyDashBoard(AppDbContext context)
->>>>>>> Added and change name, ready nani data nalang kulang:FlutterAPI/Controllers/FacultyDashBoard.cs
+
+        public FacultyDashboard(AppDbContext context)
         {
             _context = context;
         }
@@ -62,10 +55,6 @@ namespace FlutterAPI.Controllers
                 };
             }).ToList();
 
-<<<<<<< HEAD:FlutterAPI/Controllers/FacultyController.cs
-
-=======
->>>>>>> Added and change name, ready nani data nalang kulang:FlutterAPI/Controllers/FacultyDashBoard.cs
             return Ok(responses);
         }
 
