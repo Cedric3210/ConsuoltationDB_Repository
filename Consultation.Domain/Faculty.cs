@@ -34,6 +34,6 @@ namespace Consultation.Domain
         //change to ICollection<>
         public List<ConsultationRequest> ConsultationRequests { get; set; }
         //add sad
-        public ICollection<SchoolYear> SchoolYears { get; set; }
+        public SchoolYear SchoolYears { get; set; }
     }
 }
